@@ -1,0 +1,23 @@
+delupgifter/funktioner:
+
+quiz med olika antal frågor och olika antal svar,
+skapa quiz sida,
+admin funktioner : stänga av konton, göra andra konton till admin konton,
+gilla/ogilla quiz,
+skapa quiz funktionen, gillafunktionen är skyddade för oinloggade perssoner,
+
+
+Förbättrningar:
+statitsik sida där man kan se gamla resultat på quiz,
+mer kommentarer i koden och bättre struktur på variabelnamnen,
+effektivisera sql koden med join/innerjoin.
+
+
+admin användare :
+användarnamn = 123
+lösenord = 123
+
+vanlig användare :
+
+användarnamn = 33
+lösenord = 33
