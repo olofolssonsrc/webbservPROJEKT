@@ -28,7 +28,8 @@ Beskriv några delar detaljerat, t ex delar som du är extra nöjd med
   men systemet är skalbart att kunna fungera med andra "objekt" tex gamla quiz resultat. 
 
 Har du några extra finesser, bra lösningar på någon del?
-  I kommentarsfältet kan man kommentera på andras kommentarer, det finns några buggar med UI knapparna men inga alvarliga som förstör databas strukturen tex.
+  I kommentarsfältet kan man kommentera på andras kommentarer
+  -det finns några buggar med UI knapparna men inte allvarliga som förstör databas strukturen tex.
 
 Reflektera över ditt eget arbete, ditt program, din kod, dina lösningar. Bra/dåligt/bättre/utveckling!
 
