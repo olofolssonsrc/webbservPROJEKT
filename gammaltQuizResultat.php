@@ -35,16 +35,18 @@ echo("Det här quizet genomfördes " . $res[0]['date']);
 $quizId = $res[0]['quizid']; //quizid på quizet som kördes
 
 
-$sql = "SELECT id FROM bilder WHERE parent_id = " . $quizId; //hämtar bakrundsbild
+$sql = 'SELECT id FROM bilder WHERE parent_db="quizBild" AND parent_id = ' . $quizId;//hämtar bakrundsbild
 $stmt = $dbconn->prepare($sql);
 $data = array(); 
 $stmt->execute($data);
 $res = $stmt->fetchAll();
-if(count($res) > 0){
+if(count($res) > 0){//om det finns uppladdad bakrundsbild annars visas standard bakrund
+
     $quizBildId = $res[0]['id'];
 }else{
     $quizBildId = "standard";
 }
+
 
 
 ?>
@@ -184,7 +186,7 @@ body{
             $stmtFRÅGABILD = $dbconn->prepare($sql);
             $data = array(); 
             $stmtFRÅGABILD->execute($data);
-            $resFRÅGABILD = $stmt->fetchAll();
+            $resFRÅGABILD = $stmtFRÅGABILD->fetchAll();
             if(count($resFRÅGABILD) > 0){
                 $frågaBildId = $resFRÅGABILD[0]['id'];
 

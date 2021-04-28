@@ -1,69 +1,32 @@
-<style>
-
-.FlödeInfbody{
-
-    padding : 20px;
-}
-
-
-.MainHeader{
-
-    text-decoration: underline;
-}
-
-</style>
-<div class="FlödeInfbody">
-<h2 class="MainHeader">flöde</h2><br>
-<a href="../quiz2.0/index.php?flöde=view&kommentarer=view"><strong>kommentarer</strong></a>
-<a href="../quiz2.0/index.php?flöde=view&likesdislikes=view">likesdislikes</a>
-<a href="../quiz2.0/index.php?flöde=view&quiz=view">quiz</a>
-<br><br><?php
-
-//den här filen hämtar kommentarer från konton man följer
+<?php
+//denna fil hämtar komentarer på ett quiz eller en kommentar
 
 include 'dbconnection.php';
-$sql = "SELECT följare.följd_user_id, users.username FROM följare INNER JOIN users ON users.id = 
-följare.följd_user_id WHERE följare.följare_id = " . $_SESSION['userId'];
+include 'gillaknappar2.php';
+session_start();
+$parent_id = intval($_GET['parent_id']);//id på objektet som kommentaren hör till tex ett quiz
+$parent_db = $_GET['parent_db'];//databas som objekter finns i (quiz eller kommentarer)
 
-$stmt = $dbconn->prepare($sql);
-$data = array();  
-$stmt->execute($data);
-$resFÖLJARE = $stmt->fetchAll(); //hämtar alla följares användarnamnn och id
+//hämtar kommentaren (text sträng) och id på kontot som skrev kommentaren
+$sql = 'SELECT kommentarer.kommentar, kommentarer.userid, users.username, kommentarer.date, kommentarer.id 
+FROM kommentarer INNER JOIN users ON users.id = kommentarer.userid WHERE kommentarer.parent_id = '. $parent_id . ' AND kommentarer.parent_db = "' . $parent_db . '" ORDER BY kommentarer.date DESC';
+$stmtl = $dbconn->prepare($sql);
+$data = array();
+$stmtl->execute($data);
+$res = $stmtl->fetchAll();
 
-for ($i=0; $i < count($resFÖLJARE); $i++) { 
+for ($i=0; $i < count($res); $i++) { //loopar igenom alla kommentarer
+   
+    //skapar en div för kommentaren, div har klass som anger att det är en kommentar 
+    echo('<div class="kommentarOBJECT" ><a href="index.php?viewkonto=' .
+     $res[$i]['userid'] . '"><strong>' . $res[$i]['username'] . '</strong><a> ' . $res[$i]['date'] . '<br>' . $res[$i]['kommentar']);
+    gillaknappar($res[$i]['id'], 'kommentarer');//hämtar gillaknappar till kommentaren
 
-   $sql = "SELECT * FROM kommentarer WHERE userid = " . $resFÖLJARE[$i]['följd_user_id'] . " ORDER BY date ASC";
-   $stmt = $dbconn->prepare($sql);
-   $data = array();  
-   $stmt->execute($data);
-   $resALLALIKES = $stmt->fetchAll(); //hämtar alla kommentarer
-
-    for ($j=0; $j < count($resALLALIKES) - 1; $j++) { //loopar igenom alla kommentarer och skrver ut dem
-        if($resALLALIKES[$j]['parent_db'] == "quiz"){//kollar om det är en kommentar på en quiz eller kommentar
-        
-            $sql = "SELECT * FROM quiz WHERE id = " . $resALLALIKES[$j]['parent_id'];
-       
-            $stmt = $dbconn->prepare($sql);
-            $data = array();  
-            $stmt->execute($data);
-            $res = $stmt->fetchAll();
-           // print_r($res);
-            echo($resFÖLJARE[$i]['username'] . ' lämnade en kommentar på quizet ' . $res[0]['namn'] . '
-             ' . $resALLALIKES[$j]['date'] . ' "' . $resALLALIKES[$j]['kommentar'] . '"
-            <a href="index.php?viewQuiz=' .$res[0]['id'] . '">Undersök mer</a><hr>');
-        }else if($resALLALIKES[$j]['parent_db'] == "kommentar"){
-            $sql = "SELECT * FROM quiz WHERE id = " . $resALLALIKES[$j]['parent_id'];
-       
-            $stmt = $dbconn->prepare($sql);
-            $data = array();  
-            $stmt->execute($data);
-            $res = $stmt->fetchAll();
-           // print_r($res);
-            echo($resFÖLJARE[$i]['username'] . ' lämnade en kommentar på kommentaren " ' . $res[0]['namn'] .
-             ' "'. $resALLALIKES[$j]['date'] . ' "' . $resALLALIKES[$j]['kommentar'] . '"
-            <a href="index.php?viewQuiz=' .$res[0]['id'] . '">Undersök mer</a><hr>');
-        }
-    }
+    //sesvarknapp och kommentera knapp
+    echo('<button style="color:blue" class="kommentarObjektSeSvar" id="' . $res[$i]['id'] . '">visa svar</button>
+   
+    <button style="color:blue" class="kommentarObjektKommentera" id="' . $res[$i]['id'] . '">Komentera</button><br><br></div>
+    ');  
 }
 
-?></div>
+?>

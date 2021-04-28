@@ -182,7 +182,7 @@ echo("<h3>Statestik från $username's tidigare resultat</h3>"); //COUNT(likeStat
 echo("<p><strong>Klicka för detaljer</strong></p>");
 
 
-$sql = 'SELECT quizhistorik.id, quiz.id, quiz.namn, quizhistorik.date FROM quizhistorik INNER JOIN quiz ON quiz.id = quizhistorik.quizid WHERE quizhistorik.userid = '. $userid;
+$sql = 'SELECT quizhistorik.id, quiz.id, quiz.namn, quizhistorik.date FROM quizhistorik INNER JOIN quiz ON quiz.id = quizhistorik.quizid WHERE quizhistorik.userid = '. $userid. ' ORDER BY quizhistorik.date DESC';
 
 $stmtl = $dbconn->prepare($sql);
 $data = array();
@@ -191,7 +191,7 @@ $res = $stmtl->fetchAll();
 
 for ($i=0; $i < count($res); $i++) { 
 
-    echo('<a href="../quiz/gammaltQuizResultat.php?id=' . $res[$i][0] .'" >' . $res[$i]['namn'] . " " .  $res[$i]['date'] . '</a><br><br>');
+    echo('<a href="../quiz2.0/gammaltQuizResultat.php?id=' . $res[$i][0] .'" >' . $res[$i]['namn'] . " " .  $res[$i]['date'] . '</a><br><br>');
 
 }
  /*   $stmtl = $dbconn->prepare($sql);

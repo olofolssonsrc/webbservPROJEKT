@@ -112,8 +112,6 @@ echo('
   </ol></div>
   ');
 
-
-
 //alla quiz i bokstavsordning
   
 echo('

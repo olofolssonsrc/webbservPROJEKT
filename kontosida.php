@@ -54,7 +54,8 @@ if($stmtl->rowcount() > 0){
         $dislikes = $dislikeRes[0][0];
         $likes = $likeRes[0][0];
 
-        echo('<div class="quizRad"><a href="index.php?viewQuiz=' . $res[$i]['id'] . '">' . $res[$i]['namn'] . '</a> | spelats ' . $res[$i]['gamesPlayed'] . ' gånger | ' . $likes . '&#x1F44D; 
+        echo('<div class="quizRad"><a href="index.php?viewQuiz=' . $res[$i]['id'] . '">' . $res[$i]['namn'] . 
+        '</a> | spelats ' . $res[$i]['gamesPlayed'] . ' gånger | ' . $likes . '&#x1F44D; 
         '.$dislikes .'&#x1F44E;
         </div>');
     }
@@ -67,7 +68,7 @@ echo('<br>');
 //hämtar alla quyiz som användaren gillar och ogillar
 $sql = 'SELECT ls.likeStatus, q.namn, q.id FROM likesdislikes as ls 
 INNER JOIN quiz AS q ON q.id = ls.parent_id AND ls.parent_db = "quiz"
-WHERE userid = "' . $_SESSION['userId'] . '"';
+WHERE userid = ' . $_SESSION['userId'];
 
 $stmtl = $dbconn->prepare($sql);
 $data = array();
@@ -80,9 +81,9 @@ $ogillar = "<h3>Quiz som du ogillar</h3>";
 for ($i=0; $i < $stmtl->rowcount(); $i++){
 
     if($res[$i]['likeStatus'] == "LIKE"){
-        $gillar .= '<a href=index.php/index.php?viewQuiz=' . $res[$i]['id'] . '>' . $res[$i]['namn'] . '</a><br>';
+        $gillar .= '<a href=index.php?viewQuiz=' . $res[$i]['id'] . '>' . $res[$i]['namn'] . '</a><br>';
     }else{
-        $ogillar .= '<a href=index.php/index.php?viewQuiz=' . $res[$i]['id'] . '>' . $res[$i]['namn'] . '</a><br>';
+        $ogillar .= '<a href=index.php?viewQuiz=' . $res[$i]['id'] . '>' . $res[$i]['namn'] . '</a><br>';
     }
 }
 echo($gillar . $ogillar);
@@ -95,7 +96,7 @@ echo("<h3>Resultat från tidigare genomförda quiz</h3>");//hämtar och länkar 
 echo("<p><strong>Klicka för detaljer</strong></p>");
 
 $sql = 'SELECT quizhistorik.id, quiz.id, quiz.namn, quizhistorik.date FROM quizhistorik INNER JOIN 
-quiz ON quiz.id = quizhistorik.quizid WHERE quizhistorik.userid = '. $_SESSION['userId'];
+quiz ON quiz.id = quizhistorik.quizid WHERE quizhistorik.userid = '. $_SESSION['userId'] . ' ORDER BY quizhistorik.date desc';
 $stmtl = $dbconn->prepare($sql);
 $data = array();
 $stmtl->execute($data);
@@ -103,9 +104,8 @@ $res = $stmtl->fetchAll();
 
 for ($i=0; $i < count($res); $i++) { 
 
-    echo('<a href="../quiz/gammaltQuizResultat.php?id=' . $res[$i][0] .'" >' . $res[$i]['namn'] . " " .  $res[$i]['date'] . '</a><br><br>');
+    echo('<a href="../quiz2.0/gammaltQuizResultat.php?id=' . $res[$i][0] .'" >' . $res[$i]['namn'] . " " .  $res[$i]['date'] . '</a><br><br>');
 }
-
 ?>
 
 </div>

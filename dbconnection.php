@@ -1,8 +1,8 @@
 <?php
-$dbname = 'quiz';
+$dbname = 'olofon';
 $hostname = 'localhost';
-$DB_USER = 'root';
-$DB_PASSWORD = '';
+$DB_USER = 'olofon';
+$DB_PASSWORD = '4XQG9Bblm60=';
 $options  = array(PDO::MYSQL_ATTR_INIT_COMMAND => "SET NAMES 'UTF8'");
 
 try {
@@ -14,7 +14,7 @@ try {
 }
 catch(PDOException $e){
     // For debug purpose, shows all connection details
-//    echo 'Connection failed: '.$e->getMessage()."<br />";
+  //  echo 'Connection failed: '.$e->getMessage()."<br />";
       // Hide connection details.
     //echo 'Could not connect to database.<br />'); 
 }

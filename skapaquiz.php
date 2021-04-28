@@ -76,7 +76,7 @@ if(isset($_POST['quiznamn'])){
 
         $frågaId = sparaFråga($quizId, $_POST['frågor'][$i]);//sparar igenom alla frågor
   
-        if(isset($_FILES['frågabild' . ($i + 1)])){//sparar fråga bild om det skickas in (ej obligatoriskt)
+        if(is_uploaded_file($_FILES['frågabild' . ($i + 1)]['tmp_name'])){//sparar fråga bild om det skickas in (ej obligatoriskt)
 
             $file = $_FILES['frågabild' . ($i + 1)];
 
@@ -91,10 +91,10 @@ if(isset($_POST['quiznamn'])){
             $last_id = 'bild' .  $dbconn->lastInsertId();
             $fileDest = './assets/quizBilder/' . $last_id . '.jpg';
                 
-            if (move_uploaded_file( $_FILES['frågabild' . ($i + 1)]["tmp_name"], $fileDest)) {
+            if (move_uploaded_file($fileTempName, $fileDest)) {
     
               } else {
-                echo "error";
+                echo "  FAILED FRÅGA BILD ";
               }
         }
      //sparar alla svar
@@ -108,7 +108,7 @@ if(isset($_POST['quiznamn'])){
     }   
 
     //sparar bakrubnd bild om det skickas in (ej obligatoriskt)
-    if(isset($_FILES['bakrundsbild'])){
+    if(is_uploaded_file($_FILES['bakrundsbild']['tmp_name'])){
 
         $file = $_FILES['bakrundsbild'];
 
@@ -125,7 +125,7 @@ if(isset($_POST['quiznamn'])){
         if (move_uploaded_file($_FILES["bakrundsbild"]["tmp_name"], $fileDest)) {
 
           } else {
-            echo "error";
+            echo " FAILED BAKRUND BILD ";
           }
     }
 
@@ -179,7 +179,7 @@ function Fråga(){//ritar ut UI för att skapa en fråga
     //fråga input ----
     frågaInput = document.createElement('P');
     frågaInput.innerHTML = 'fråga ' + (frågeIdIndex + 1)+ ' <input type="text" name="frågor[]" required>';
-    frågaHTML.innerHTML += '<br>frågabild <input name="frågabild' + (frågeIdIndex + 1) + '"  type="file">';
+    frågaHTML.innerHTML += '<br>frågabild <input name="frågabild' + (frågeIdIndex) + '"  type="file">';
     frågaHTML.appendChild(frågaInput);
     document.getElementById('frågor').appendChild(frågaHTML);
     //fråga input ----

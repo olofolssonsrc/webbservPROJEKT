@@ -9,7 +9,7 @@ if(!Auth()){
 include 'dbconnection.php';
 if(isset($_GET['text'])){
 
-$text = $_GET['text'];
+$text = htmlspecialchars($_GET['text']);
 
 $parentId = $_GET['parent_id'];//vilket objekt som kommentaren är till, kan vara ett quiz eller annan kommentar
 $parentDB = $_GET['parent_db'];//vilken table i databasen som objektyet finns i

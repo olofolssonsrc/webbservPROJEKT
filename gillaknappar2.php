@@ -23,7 +23,12 @@
 
 </style>
 <?php 
+//filen gör gilla/ogilla knappar till kommentarer/quiz
+//färgen på knapparna är olika beroende på användarens gilla status.
+//knapparna innehåller siffra som anger hur många gillningar och ogillningar
 
+//lägger till onclick kod för varje gillaknapp. Om <script></script> kod hämtas med get request körs inte koden och inga Eventlisteners kan sättas på
+//men scripten i onClick i html fungerar
 function onClickString($parent_id, $parent_db, $gillaId, $ogillaId, $likeStatus){
 
 if($likeStatus == 'DISLIKE'){
@@ -38,19 +43,15 @@ $str = "get('LIKESTATUS=" . $likeStatus . "&parent_id=" . $parent_id . "&parent_
     
 $str = "get('LIKESTATUS=" . $likeStatus . "&parent_id=" . $parent_id . "&parent_db=" . $parent_db . "','insertlike2.php').then(() => {
 
-    document.getElementById('" . $ogillaId . "').classList += 'likedislike';
-    document.getElementById('" . $gillaId . "').classList = ' gilla';
+    document.getElementById('" . $ogillaId . "').classList = 'likedislike';
+    document.getElementById('" . $gillaId . "').classList += ' gilla';
 
   });";
 }
-    //$str = "get('LIKESTATUS=LIKE&parent_id='"'. $parent_id .'"&parent_db="' . $parent_db . '",insertlike2.php).then(function() {
-    //});';
-
+ 
     return $str;  
 }
-//filen gör gilla/ogilla knappar till kommentarer/quiz
-//färgen på knapparna är olika beroende på användarens gilla status.
-//knapparna innehåller siffra som anger hur många gillningar och ogillningar
+
 
 function gillaknappar($parent_id,  $parent_db, $html = ""){//parent_id är id på objektet som användaren gillar, tex id på ett specifikt quiz, $parent_db 
     //är en sträng som anger vilken databas objektet finns i.
@@ -89,16 +90,16 @@ $data = array();
 $stmt->execute($data);
 $res = $stmt->fetchAll();
 
-if($stmt->rowcount() > 0){//om användaren har gillat/ogillat
+if($stmt->rowcount() > 0){//style om användaren har gillat/ogillat
 
-        if($res[0]['likeStatus'] == 'LIKE'){//om användaren har gillat
+        if($res[0]['likeStatus'] == 'LIKE'){//style om användaren har gillat
             ?>
            
 <button type="button" onClick= "<?php echo(onClickString($parent_id, $parent_db, $gillaId, $ogillaId, "LIKE"));?>" class="likedislike gilla" id="<?php echo($gillaId);?>"><?php if(strlen($html)>0){echo($html);}else{echo('<span class="emoji">&#x1F44D;</span>');} echo($resGillnmingar[0][0]);?></button>
 <button type="button" onClick= "<?php echo(onClickString($parent_id, $parent_db, $gillaId, $ogillaId, "DISLIKE"));?>" class="likedislike" id="<?php echo($ogillaId);?>"><?php if(strlen($html)>0){echo($html);}else{echo('<span class="emoji">&#x1F44E;</span>');} echo($resOgillnmingar[0][0]);?></button><br>
 
         <?php
-        }else{//om användaren har ogillat
+        }else{//style om användaren har ogillat
             ?>
             
 <button type="button" onClick= "<?php echo(onClickString($parent_id, $parent_db, $gillaId, $ogillaId, "LIKE"));?>" class="likedislike" id="<?php echo($gillaId);?>"><?php if(strlen($html)>0){echo($html);}else{echo('<span class="emoji">&#x1F44D;</span>');} echo($resGillnmingar[0][0]);?></button>
@@ -106,7 +107,7 @@ if($stmt->rowcount() > 0){//om användaren har gillat/ogillat
 
         <?php
         }
-}else{//om användaren inte har  gillat eller ogillat
+}else{//style om användaren inte har  gillat eller ogillat
     ?>
         
 <button type="button" onClick= "<?php echo(onClickString($parent_id, $parent_db, $gillaId, $ogillaId, "LIKE"));?>" class="likedislike" id="<?php echo($gillaId);?>"><?php if(strlen($html)>0){echo($html);}else{echo('<span class="emoji">&#x1F44D;</span>');} echo($resGillnmingar[0][0]);?></button>
@@ -116,18 +117,6 @@ if($stmt->rowcount() > 0){//om användaren har gillat/ogillat
 }
    ?>
 <script>
-
-document.getElementById("<?php echo($gillaId);?>").addEventListener('click', () => {//lägger till eventlistener till knapparna  
-    //skriver in data som skickas till insertlike2 filen om användaren klickar på knapen 
-});
-
-document.getElementById("<?php echo($ogillaId);?>").addEventListener('click', () => {//-||-
-
-get('LIKESTATUS=DISLIKE&parent_id=<?php echo("$parent_id");?>&parent_db=<?php echo("$parent_db"); ?>', 'insertlike2.php').then(() => {
-            document.getElementById("<?php echo($ogillaId);?>").classList += ' ogilla';
-            document.getElementById("<?php echo($gillaId);?>").classList = 'likedislike';
-    })           
-});
 
 function get(data, location){//get request funktion
             return new Promise((resolve) => {
@@ -148,7 +137,7 @@ function get(data, location){//get request funktion
 </script>
 <?php
 }else{
-    echo(' <strong>Logga in för att gilla/ogilla kommentarer</strong>');
+    echo(' <strong> Logga in för att gilla/ogilla </strong>');
 }
 }
 ?>

@@ -15,13 +15,14 @@ $stmt = $dbconn->prepare($sql);
 $data = array(); 
 $stmt->execute($data);
 $res = $stmt->fetchAll();
-if(count($res) > 0){//om det finns uppladdad bakrundsbild annars visas standard bakrund
+if(isset($res[0]['id'])){//om det finns uppladdad bakrundsbild annars visas standard bakrund
 
     $quizBildId = $res[0]['id'];
 }else{
     $quizBildId = "standard";
 }
 
+echo($quizBildId);
 ?>
 
 <style src="assets/style.css"></style>
@@ -138,17 +139,18 @@ body{
             }
             }
             ///-------fråga bild om det finns till frågan
-            $sql = 'SELECT id FROM bilder WHERE parent_db="frågaBild" AND parent_id = ' . $frågaId;
-            $stmtFRÅGABILD = $dbconn->prepare($sql);
+            $sqlFRÅGABILD = 'SELECT id FROM bilder WHERE parent_db="frågaBild" AND parent_id = ' . $frågaId;
+            $stmtFRÅGABILD = $dbconn->prepare($sqlFRÅGABILD);
             $data = array(); 
             $stmtFRÅGABILD->execute($data);
             $resFRÅGABILD = $stmtFRÅGABILD->fetchAll();
-            if(count($resFRÅGABILD) > 0){
+           
+            if($stmtFRÅGABILD->rowcount() > 0){
                 $frågaBildId = $resFRÅGABILD[0]['id'];
-
+                
                 echo('<div class="frågabild"> <img class="frågaBild" src="assets/quizBilder/bild' .  $frågaBildId . '.jpg"></div>');
             
-            }
+            }//-----hämtar bilderna till alla frågor
            ///-------fråga bild om det finns till frågan
            
             echo('</div>');

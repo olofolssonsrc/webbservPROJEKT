@@ -31,7 +31,14 @@ position: absolute;
 
 <div id="kommentarFält">
 <script>
+/**
+Den här filen innehåller 
 
+
+ */
+
+
+//funktion som skapar en knapp för att öppna ett kommentera fönster 
 function skapaKomenteraKnapp(parent_id, parent_db){
 
 var knapp = document.createElement('BUTTON');
@@ -43,12 +50,13 @@ knapp.addEventListener('click', () => {
 return knapp;
 }
 
+//funktion som öppnar ett fönster där man kan skriva in en ny kommentar och skicka
 function nyKommentar(parent_id, parent_db){
-    if(document.getElementById('kommenteraRuta')){
+    if(document.getElementById('kommenteraRuta')){ //tar bort om det redan finns en kommentera ruta
         document.getElementById('kommenteraRuta').remove();
     }
     var ruta = document.createElement('DIV');
-    ruta.classList = "kommenteraRuta"
+    ruta.classList = "kommenteraRuta";
     ruta.id = 'kommenteraRuta';
     var textbox = document.createElement('INPUT');
     var kommenteraKnapp = document.createElement('BUTTON');
@@ -57,7 +65,7 @@ function nyKommentar(parent_id, parent_db){
     ruta.appendChild(kommenteraKnapp);
     document.body.appendChild(ruta);
 
-    deleteBtn = document.createElement('DIV');
+    deleteBtn = document.createElement('DIV'); //lägger till stäng ner knapp
     deleteBtn.classList = 'deleteBtn ';
     deleteBtn.innerHTML = ' X ';
 
@@ -73,10 +81,11 @@ function nyKommentar(parent_id, parent_db){
         var text = textbox.value;
         var user = <?php echo('"' . $_SESSION['username'] . '"');?>
 
+        //skickar en get request med komenterade objektets tablename och id och kommentarinnehåpllet
         get('text=' + text + '&parent_id=' + parent_id + '&parent_db=' + parent_db, 'insertKommentar.php').then(() => {
             
             document.getElementById('kommenteraRuta').remove();
-            if(parent_db == "quiz"){
+            if(parent_db == "quiz"){//(UI)skreiver ner kommentaren på olika ställen beroende på om det är  en quiz kommentar eller kommentar under en anna kommentar
                 getKommentarer(document.getElementById('kommentarFält'), parent_id, parent_db)
             }else{
                 getKommentarer(document.getElementById(parent_id), parent_id, parent_db)
@@ -85,7 +94,7 @@ function nyKommentar(parent_id, parent_db){
         });
     })
 }
-
+//get request funktion
  function get(data, location){
             return new Promise((resolve) => {
 
@@ -102,12 +111,15 @@ function nyKommentar(parent_id, parent_db){
             });
        } 
     
+//börjar med att hämta alla kommentarer tillq quizet
 getKommentarer( document.getElementById('kommentarFält'), <?php echo($_GET['viewQuiz']);?>, "quiz");
 
-function insertAfter(el, referenceNode) {
-            referenceNode.parentNode.insertBefore(el, referenceNode.nextSibling);  
-        }
+//funktion för att appenda ett HTML direkt efter ett annat html element. (Kommentaren som gjordes på en annan kommentar borde hamna direkt under den) 
+function insertAfter(el, referenceObj) {
+          referenceObj.parentNode.insertBefore(el, referenceObj.nextSibling);  
+    }
 
+//hämtar alla kommentarer på ett objekt och skriver in dem under htmlTAG
 function getKommentarer(htmlTAG, parent_id, parent_db){
 
     var underKommentarer = document.getElementsByClassName('parentid' + parent_id);
@@ -128,13 +140,15 @@ function getKommentarer(htmlTAG, parent_id, parent_db){
         updateListeners();
     });
 }
+
+//hämtar alla kommentarer till ett objekt och togglar kommentarer obejektets visa/dölja status
 function visaKommentarer(kommentarObjekt){
   
     kommentarObjekt.status = "dölj svar";
     kommentarObjekt.innerHTML = "dölj svar";
     getKommentarer( kommentarObjekt, kommentarObjekt.id, "kommentarer");
 }
-
+//raderar  till ett objekt och togglar kommentarer obejektets visa/dölja status
 function döljKommentarer(kommentarObjekt){
 
     kommentarObjekt.status = "visa svar"
@@ -147,8 +161,12 @@ function döljKommentarer(kommentarObjekt){
     }     
 }
 
+
+//updaterar alla EventListeners på de olika
+//Behövs pga <script> taggar i kod som hämtas med ajax körs inte automatiskt 
 function updateListeners(){
 
+// kommentarknapparna (visa svar/döljsvar)
 var kommentarObjektse = document.getElementsByClassName('kommentarObjektSeSvar');
     for (let i = 0; i < kommentarObjektse.length; i++) {
         
@@ -166,6 +184,7 @@ var kommentarObjektse = document.getElementsByClassName('kommentarObjektSeSvar')
         }
     }  
 
+//kommentarknapparna (kommentera)
 var kommentarObjekt = document.getElementsByClassName('kommentarObjektKommentera');
     for (let i = 0; i < kommentarObjekt.length; i++) {
         
@@ -176,6 +195,7 @@ var kommentarObjekt = document.getElementsByClassName('kommentarObjektKommentera
     }  
 }
 
+//hämtar quizkommentarer och lägger till kommentera knapp för quizet.
 initiera();
 function initiera(){
     document.getElementById('kommentarFält').appendChild( skapaKomenteraKnapp(<?php echo($_GET['viewQuiz']);?>, "quiz"));

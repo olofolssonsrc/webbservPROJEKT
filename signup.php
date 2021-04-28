@@ -39,28 +39,25 @@ if(isset($_POST['username'])&&isset($_POST['password'])&&isset($_POST['epost']))
 
   if (count($res) > 0){//kollar om det var en korrekt aktiveringskod och sparar kontot på den permanenta databasen så att kontot nu fungerar
 
-    $sql = "INSERT INTO users (username, password, epost, admin, bannad, reg_date) 
-    VALUES (?, ?, ?, ?, ?, now())";
-    $stmt = $dbconn->prepare($sql);
-    $data = array($res[0]['username'], password_hash($res[0]['password'], PASSWORD_DEFAULT), $res[0]['email'], 0, 0);
-    $stmt->execute($data);
+    $sqlresKONTROL = 'SELECT * FROM users WHERE username = "' . $res[0]['username'] .'"';
   
-    $_SESSION['username'] =  $res[0]['username'];
-    $_SESSION['userId'] =  $res[0]['id'];
-    $_SESSION['userstatus'] =  1;
+    $stmtresKONTROL = $dbconn->prepare($sqlresKONTROL);
+    $dataresKONTROL = array();  
+    $stmtresKONTROL->execute($dataresKONTROL);
+    $resKONTROL = $stmtresKONTROL->fetchAll();
+
+    if(!isset($resKONTROL[0])){
+      $sql = "INSERT INTO users (username, password, epost, admin, bannad, reg_date) 
+      VALUES (?, ?, ?, ?, ?, now())";
+      $stmt = $dbconn->prepare($sql);
+      $data = array($res[0]['username'], password_hash($res[0]['password'], PASSWORD_DEFAULT), $res[0]['email'], 0, 0);
+      $stmt->execute($data);      
   
-    $now = time();
-    $signupTime = strtotime($res[0]['date']);
-    
-    if($now - $signupTime > 15 * 60){
-      echo('Denna länken har gått ut. <br><a href="signup.php">Klicka här för att skapa ett nytt konto.</a>');
+        echo('<h1>Hej ' . $res[0]['username'] . '! välkommen till quiz.se!</h1>');
+        echo('<a href="login.php">Start</a>');
     }else{
-
-      echo('<h1>Hej ' . $res[0]['username'] . '! välkommen till quiz.se!</h1>');
-      echo('<a href="index.php">Start</a>');
+      header('Location: login.php');
     }
-    
-
   }else{
     echo('Denna länken är inkorrekt.<br><a href="signup.php">Klicka här för att skapa ett nytt konto.</a>');
   }

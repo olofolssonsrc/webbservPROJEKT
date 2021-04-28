@@ -24,7 +24,7 @@ position: absolute;
 <div id="kommentarFält">
 
 <script>
-
+//fil används inte
 function skapaKomenteraKnapp(parent_id, parent_db){
 
 var knapp = document.createElement('BUTTON');

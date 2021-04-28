@@ -24,6 +24,7 @@ if(!$_POST){
     header('Location: index.php');
 }
 
+
 $quizId = $_GET['id']; //hämtar bakrundsbild om det finns annars standardbild
 include('dbconnection.php');
 
@@ -112,7 +113,7 @@ body{
             $sql = "SELECT q.namn, f.id, f.fråga  
             FROM frågor AS f 
             INNER JOIN quiz AS q ON q.id = f.quizId WHERE q.id = $quizId";
-            
+
             $stmt = $dbconn->prepare($sql);
             $data = array();  
             $stmt->execute($data);
@@ -130,19 +131,19 @@ body{
         if($_SESSION['username']){
             //--sparar historik
             $sql = 'SELECT id FROM users WHERE username = "' . $_SESSION['username'] . '"';
-                
+             
             $stmt = $dbconn->prepare($sql);
             $data = array();  
             $stmt->execute($data);
             $resUSERID = $stmt->fetchAll();
-           
+         
             $sql = "INSERT INTO quizhistorik (quizid, userid, date) 
             VALUES (?, ?, now())";
             $stmt = $dbconn->prepare($sql);
             $data = array($quizId, $resUSERID[0]['id']);
             $stmt->execute($data);
             $quizHistorikId = $dbconn->lastInsertId();
-            //--sparar historik
+            //--sparar historik 
         }
         
         $i = 0;
