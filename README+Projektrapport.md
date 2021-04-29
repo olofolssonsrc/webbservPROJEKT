@@ -16,7 +16,7 @@ Vilka deluppgifter/moment från projektinstruktionerna har du gjort?
 
 Beskriv i stora drag hur ditt program fungerar? Hur är koden strukturerad?
 
-  Indexsidan är huvudsidan som inkluderar olika sidor till main sektionen tex sidan för rekomenderade quiz och flöde sidan.
+  Indexsidan är huvudsidan som inkluderar olika sidor till "main sektionen", tex sidan för rekomenderade quiz och flöde sidan.
 
   Andra filer som kontrolerar hela fönstret är skapaquiz, görquiz, quiz resultat, admin sida mm.
 
@@ -29,18 +29,18 @@ Beskriv några delar detaljerat, t ex delar som du är extra nöjd med
 
 Har du några extra finesser, bra lösningar på någon del?
   I kommentarsfältet kan man kommentera på andras kommentarer
-  -det finns några buggar med UI knapparna men inte allvarliga som förstör databas strukturen tex.
 
 Reflektera över ditt eget arbete, ditt program, din kod, dina lösningar. Bra/dåligt/bättre/utveckling!
 
-  Jag är nöjd med helheten, om jag hade haft med tid hade jag lagt mer tid på att ta bort buggar och implementerat byta lösenord funktionnen på login delen.
+  Jag är nöjd med helheten, om jag hade haft med tid hade jag lagt mer tid på att ta bort buggar och implementerat byta lösenord funktionnen/tids begänsing på skapakonto delen.
   SQL hade jag velat kunna på en högre nivå. Det var många gånger jag visste att det fanns en sql lösning men som jag inte kunde genomföra, 
-  det ledde till att jag fick använda mer php kod och hämta information from databasen i delar vilket inte är bra fär prestandan.
+  det ledde till att jag fick använda mer php kod och hämta information from databasen i delar, vilket inte är bra för prestandan.
   
 Skriv något om hur du upplevt projektet, lätt/svårt, kul/tråkigt, något annat? Beskriv gärna lite med egna ord.
 Har du tips på hur projektet kan göras bättre?
 
-  Jag tyckte att det var ett kul projekt.
+  Jag tyckte projektet var kul!
+  förslag på förbättring = mer sql
 
 struktur, funktionalitet och innehåller användarbeskrivning
 
@@ -60,6 +60,7 @@ Följa konto funktionen.
   Andras gamla resultat kan ses från deras kontosidor.
   -förbättringsmöjlighet, kunna sortera efter % rätt på quizet
   
+ kommentera
   
-  
-
+ 
+ 
