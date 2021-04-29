@@ -32,10 +32,8 @@ position: absolute;
 <div id="kommentarFält">
 <script>
 /**
-Den här filen innehåller 
-
-
- */
+Den här filen ansvarar för att hämta och skicka kommentarer och sortera dem på rätt sätt i kommentarsfältet
+*/
 
 
 //funktion som skapar en knapp för att öppna ett kommentera fönster 
@@ -85,12 +83,15 @@ function nyKommentar(parent_id, parent_db){
         get('text=' + text + '&parent_id=' + parent_id + '&parent_db=' + parent_db, 'insertKommentar.php').then(() => {
             
             document.getElementById('kommenteraRuta').remove();
-            if(parent_db == "quiz"){//(UI)skreiver ner kommentaren på olika ställen beroende på om det är  en quiz kommentar eller kommentar under en anna kommentar
-                getKommentarer(document.getElementById('kommentarFält'), parent_id, parent_db)
-            }else{
-                getKommentarer(document.getElementById(parent_id), parent_id, parent_db)
-            }
+
+            if(parent_db == "quiz"){//skriver ner nya kommentaren + alla tidigare kommentarer på objektet(ifall de inte visades inann)
             
+                getKommentarer(document.getElementById('kommentarFält'), parent_id, parent_db);
+            }else{
+
+
+                visaKommentarer(document.getElementById(parent_id));
+            }
         });
     })
 }
@@ -110,9 +111,7 @@ function nyKommentar(parent_id, parent_db){
            xmlhttp.send();
             });
        } 
-    
-//börjar med att hämta alla kommentarer tillq quizet
-getKommentarer( document.getElementById('kommentarFält'), <?php echo($_GET['viewQuiz']);?>, "quiz");
+
 
 //funktion för att appenda ett HTML direkt efter ett annat html element. (Kommentaren som gjordes på en annan kommentar borde hamna direkt under den) 
 function insertAfter(el, referenceObj) {
@@ -133,76 +132,50 @@ function getKommentarer(htmlTAG, parent_id, parent_db){
     var newEl = document.createElement('div');
     newEl.innerHTML = kommentarer;
     newEl.style.marginLeft = 30 + "px";
-    newEl.classList += (" parentid"+parent_id);
+    newEl.classList += ("kommentarOBJECT parentid"+parent_id);
     var ref = htmlTAG.parentNode;
     insertAfter(newEl, ref);
-
-        updateListeners();
     });
 }
 
 //hämtar alla kommentarer till ett objekt och togglar kommentarer obejektets visa/dölja status
-function visaKommentarer(kommentarObjekt){
-  
-    kommentarObjekt.status = "dölj svar";
-    kommentarObjekt.innerHTML = "dölj svar";
-    getKommentarer( kommentarObjekt, kommentarObjekt.id, "kommentarer");
+function visaKommentarer(kommentarObjektButtonId){
+    kommentarObjektButton  = document.getElementById(kommentarObjektButtonId);
+    getKommentarer( kommentarObjektButton, kommentarObjektButton.id, "kommentarer");
+    var index = kommentarObjektButton.innerHTML.indexOf('(');
+    var antal = kommentarObjektButton.innerHTML.substring(index + 1, index + 2);
+    kommentarObjektButton.innerHTML = "dölj svar (" + antal + ")";
+
+    kommentarObjektButton.status = "dölj svar";
+
 }
-//raderar  till ett objekt och togglar kommentarer obejektets visa/dölja status
-function döljKommentarer(kommentarObjekt){
+//raderar underkomentarerna till ett objekt och togglar kommentarer obejektets visa/dölja status
+function döljKommentarer(kommentarObjektButtonId){
 
-    kommentarObjekt.status = "visa svar"
-    kommentarObjekt.innerHTML = "visa svar";
+    kommentarObjektButton  = document.getElementById(kommentarObjektButtonId);
 
-    var underKommentarer = document.getElementsByClassName('parentid' + kommentarObjekt.id);
+    var index = kommentarObjektButton.innerHTML.indexOf('(');
+    var antal = kommentarObjektButton.innerHTML.substring(index + 1, index + 2);
+    kommentarObjektButton.innerHTML = "visa svar (" + antal + ")";
+
+    kommentarObjektButton.status = "visa svar";
+
+    var underKommentarer = document.getElementsByClassName('parentid' + kommentarObjektButton.id);
     for (let i = 0; i < underKommentarer.length; i++) {
                         
         underKommentarer[i].remove();        
-    }     
+    }
 }
 
-
-//updaterar alla EventListeners på de olika
-//Behövs pga <script> taggar i kod som hämtas med ajax körs inte automatiskt 
-function updateListeners(){
-
-// kommentarknapparna (visa svar/döljsvar)
-var kommentarObjektse = document.getElementsByClassName('kommentarObjektSeSvar');
-    for (let i = 0; i < kommentarObjektse.length; i++) {
-        
-        if(!kommentarObjektse[i].hasListener){
-
-            kommentarObjektse[i].hasListener = true;
-            kommentarObjektse[i].addEventListener('click', () => {
-                
-                if(kommentarObjektse[i].status == "dölj svar"){
-                    döljKommentarer(kommentarObjektse[i]);
-                }else{
-                    visaKommentarer(kommentarObjektse[i]);
-                }
-            });
-        }
-    }  
-
-//kommentarknapparna (kommentera)
-var kommentarObjekt = document.getElementsByClassName('kommentarObjektKommentera');
-    for (let i = 0; i < kommentarObjekt.length; i++) {
-        
-        kommentarObjekt[i].addEventListener('click', () => {
-
-            nyKommentar( kommentarObjekt[i].id, "kommentarer");
-        });
-    }  
-}
 
 //hämtar quizkommentarer och lägger till kommentera knapp för quizet.
-initiera();
+
 function initiera(){
     document.getElementById('kommentarFält').appendChild( skapaKomenteraKnapp(<?php echo($_GET['viewQuiz']);?>, "quiz"));
     getKommentarer( document.getElementById('kommentarFält'), <?php echo($_GET['viewQuiz']);?>, "quiz");
    
 }
-
+initiera();
 
 </script>
 <br>
