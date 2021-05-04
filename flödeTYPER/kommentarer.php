@@ -13,7 +13,7 @@
 
 </style>
 <div class="FlödeInfbody">
-<h2 class="MainHeader">flöde</h2><br>
+<h2 class="MainHeader">Aktuella händelser från konton du följer</h2><br>
 <a href="../quiz2.0/index.php?flöde=view&kommentarer=view"><strong>kommentarer</strong></a>
 <a href="../quiz2.0/index.php?flöde=view&likesdislikes=view">likesdislikes</a>
 <a href="../quiz2.0/index.php?flöde=view&quiz=view">quiz</a>
@@ -39,32 +39,25 @@ for ($i=0; $i < count($resFÖLJARE); $i++) {
    $stmt = $dbconn->prepare($sql);
    $data = array();  
    $stmt->execute($data);
-   $resALLALIKES = $stmt->fetchAll(); //hämtar alla kommentarer
+   $reskommentarer = $stmt->fetchAll(); //hämtar alla kommentarer
 
-    for ($j=0; $j < count($resALLALIKES) - 1; $j++) { //loopar igenom alla kommentarer och skrver ut dem
-        if($resALLALIKES[$j]['parent_db'] == "quiz"){//kollar om det är en kommentar på en quiz eller kommentar
+    for ($j=0; $j < count($reskommentarer); $j++) { //loopar igenom alla kommentarer och skrver ut dem
+        if($reskommentarer[$j]['parent_db'] == "quiz"){//kollar om det är en kommentar på en quiz eller kommentar
         
-            $sql = "SELECT * FROM quiz WHERE id = " . $resALLALIKES[$j]['parent_id'];
+            $sql = "SELECT * FROM quiz WHERE id = " . $reskommentarer[$j]['parent_id'];//hämtar info om quizet personen gillade
        
             $stmt = $dbconn->prepare($sql);
             $data = array();  
             $stmt->execute($data);
             $res = $stmt->fetchAll();
-           // print_r($res);
-            echo('<a href="../quiz2.0/index.php?viewkonto=' . $resFÖLJARE[$i]['id'] . '">' . $resFÖLJARE[$i]['username'] . '</a> lämnade en kommentar på quizet ' . $res[0]['namn'] . '
-             ' . $resALLALIKES[$j]['date'] . ' "' . $resALLALIKES[$j]['kommentar'] . '"
-            <a href="../quiz2.0/index.php?viewQuiz' .$res[0]['id'] . '">Undersök mer</a><hr>');
-        }else if($resALLALIKES[$j]['parent_db'] == "kommentar"){
-            $sql = "SELECT * FROM quiz WHERE id = " . $resALLALIKES[$j]['parent_id'];
-       
-            $stmt = $dbconn->prepare($sql);
-            $data = array();  
-            $stmt->execute($data);
-            $res = $stmt->fetchAll();
-           // print_r($res);
-            echo('<a href="../quiz2.0/index.php?viewkonto=' . $resFÖLJARE[$i]['id'] . '">' . $resFÖLJARE[$i]['username'] . '</a> lämnade en kommentar på kommentaren " ' . $res[0]['namn'] .
-             ' "'. $resALLALIKES[$j]['date'] . ' "' . $resALLALIKES[$j]['kommentar'] . '"
+
+            echo('<a href="../quiz2.0/index.php?viewkonto=' . $resFÖLJARE[$i]['id'] . '">' . $resFÖLJARE[$i]['username'] . '</a> lämnade en kommentar på quizet "' . $res[0]['namn'] . '"
+             ' . $reskommentarer[$j]['date'] . ' "' . $reskommentarer[$j]['kommentar'] . '"
             <a href="../quiz2.0/index.php?viewQuiz=' .$res[0]['id'] . '">Undersök mer</a><hr>');
+        }else if($reskommentarer[$j]['parent_db'] == "kommentarer"){
+           
+            echo('<a href="../quiz2.0/index.php?viewkonto=' . $resFÖLJARE[$i]['id'] . '">' . $resFÖLJARE[$i]['username'] . '</a> lämnade en kommentar på kommentaren " ' . $reskommentarer[$j]['kommentar'] .
+             ' "'. $reskommentarer[$j]['date'].'<hr>');
         }
     }
 }

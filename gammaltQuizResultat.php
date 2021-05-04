@@ -206,19 +206,19 @@ body{
     </div>
 
     <div class="quizFooter"> 
-    <div><?php /*echo($antalRätt . '/' . $antalfrågor);*/?></div><br>
     <a href="index.php">hem</a><br>
 
     <?php
 
-    $sql = "SELECT * FROM quiz WHERE id = " . $quizId;
+    //hämtar user id och username på  quiz skaparen
+    $sql = "SELECT users.id, quiz.creator FROM quiz INNER JOIN users ON users.username = quiz.creator WHERE quiz.id = " . $quizId;
 
     $stmt = $dbconn->prepare($sql);
     $data = array();  
     $stmt->execute($data);
     $res = $stmt->fetchAll();
-        //besök skaparen av quizets kontosida
-    echo('<a href="index.php?viewkonto=' . $res[0]['creator'] . '">besök skaparen av quizet "' . $res[0]['creator'] . '" </a>');
+    //besök skaparen av quizets kontosida
+    echo('<a href="index.php?viewkonto=' . $res[0]['id'] . '">besök skaparen av quizet ' . $res[0]['creator'] . ' </a>');
     ?>
     <br><br>
     </div>

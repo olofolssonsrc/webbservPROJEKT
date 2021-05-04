@@ -55,7 +55,7 @@ $str = "get('LIKESTATUS=" . $likeStatus . "&parent_id=" . $parent_id . "&parent_
 
 function gillaknappar($parent_id,  $parent_db, $html = ""){//parent_id är id på objektet som användaren gillar, tex id på ett specifikt quiz, $parent_db 
     //är en sträng som anger vilken databas objektet finns i.
-if(isset($_SESSION['userId'])){
+
 
 include 'dbconnection.php';//räknar alla likes
 $sql = ' SELECT 
@@ -136,8 +136,6 @@ function get(data, location){//get request funktion
        } 
 </script>
 <?php
-}else{
-    echo(' <strong> Logga in för att gilla/ogilla </strong>');
-}
+
 }
 ?>

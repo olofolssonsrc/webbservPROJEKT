@@ -79,9 +79,15 @@ if(isset($_POST['startquiz'])){
    echo('test') ;
 };
 
-include 'gillaknappar2.php'; //inkluderar gillaknappar till quizet
-gillaknappar(strval($_GET['viewQuiz']), 'quiz');
-echo('<br><br>');
+//om inloggad visas gillaknappar
+if(isset($_SESSION['username'])){
+    include 'gillaknappar2.php'; //inkluderar gillaknappar till quizet
+    gillaknappar(strval($_GET['viewQuiz']), 'quiz');
+    echo('<br><br>');
+}else{
+    echo('Logga in för att gilla quizet<br><br>');
+}
+
 ?>
 
 <form method="post" action="<?php echo($_SERVER["PHP_SELF"] . "?viewQuiz=" . $quizId) ?>">
@@ -92,9 +98,14 @@ echo('<br><br>');
 <h3>Kommentarer</h3>
 <?php
 
-//inkluderar kommentarsfält
-include 'komentarsfält2.php';
-    
+//inkluderar kommentarsfält om inloggad
+if(isset($_SESSION['username'])){
+    include 'komentarsfält2.php';
+}else{
+    echo('logga in för att se kommentarer och kommentera');
+}
+  
+
 ?>
 
 </div>

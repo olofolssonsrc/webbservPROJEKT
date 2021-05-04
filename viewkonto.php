@@ -27,10 +27,9 @@
 <div class="viewQuizInfbody">
 <a href="index.php"><h4>< tillbaks</h4></a>
 <?php
+
 include('dbconnection.php');
-//fil visar informaiton om ett konto
-
-
+//filen visar informaiton om ett konto
 
 $userid = intval($_GET['viewkonto']);
 
@@ -47,15 +46,8 @@ $username = $res[0]['username'];
 if($username == $_SESSION['username']){
     header('Location: index.php?kontosida=view');
 }
-/*
-$sql = "SELECT  q.namn, q.id, q.gamesPlayed, ls.likeStatus
-    FROM users AS u 
-    INNER JOIN quiz AS q ON q.creator = u.username 
-    INNER JOIN likesdislikes AS ls ON q.id = ls.quizid
-    WHERE u.username = $username";
- */
 
- //hämtar alla quiz kontot har skapat
+//hämtar alla quiz kontot har skapat
 $sql = 'SELECT  q.namn, q.id, q.gamesPlayed
     FROM users AS u 
     INNER JOIN quiz AS q ON q.creator = u.username 
@@ -65,21 +57,13 @@ $data = array();
 $stmtl->execute($data);
 $res = $stmtl->fetchAll();
 
- /*$sql = "SELECT q.namn, q.id, q.gamesPlayed, likeStatus
- FROM users AS u 
- INNER JOIN quiz AS q ON q.creator = u.username 
- WHERE u.username =  $username 
- UNION
- SELECT q.namn, q.id, q.gamesPlayed, ld.likeStatus
- FROM users AS u 
- INNER JOIN quiz AS q ON q.creator = u.username 
- INNER JOIN likesdislikes AS ld
- WHERE u.username =  $username";
-*/
 //knapp för att följa kontot
 echo('<h1>' . $username . '<h1>');
-include 'följ_avfölj.php';
+
+include('följ_avfölj.php');
+
 getFöljBtn($userid);
+
 echo('<h3> quiz skapade av ' . $username . '</h3>');
 ?>
 <script>
@@ -175,12 +159,10 @@ for ($i=0; $i < $stmtl->rowcount(); $i++){
 }
 echo($gillar . $ogillar);
 
-
 //tidigare resultat kontot har fått vid olika quiz
 
 echo("<h3>Statestik från $username's tidigare resultat</h3>"); //COUNT(likeStatus) 
 echo("<p><strong>Klicka för detaljer</strong></p>");
-
 
 $sql = 'SELECT quizhistorik.id, quiz.id, quiz.namn, quizhistorik.date FROM quizhistorik INNER JOIN quiz ON quiz.id = quizhistorik.quizid WHERE quizhistorik.userid = '. $userid. ' ORDER BY quizhistorik.date DESC';
 
@@ -194,6 +176,7 @@ for ($i=0; $i < count($res); $i++) {
     echo('<a href="../quiz2.0/gammaltQuizResultat.php?id=' . $res[$i][0] .'" >' . $res[$i]['namn'] . " " .  $res[$i]['date'] . '</a><br><br>');
 
 }
+
  /*   $stmtl = $dbconn->prepare($sql);
     $data = array();
     $stmtl->execute($data);

@@ -11,7 +11,7 @@ padding : 20px;
 </style>
 
 <div class="FlödeInfbody">
-<h2 class="MainHeader">flöde</h2><br>
+<h2 class="MainHeader">Aktuella händelser från konton du följer</h2><br>
 <a href="../quiz2.0/index.php?flöde=view&kommentarer=view">kommentarer</a>
 <a href="../quiz2.0/index.php?flöde=view&likesdislikes=view">likesdislikes</a>
 <a href="../quiz2.0/index.php?flöde=view&quiz=view"><strong>quiz</strong></a>
@@ -31,7 +31,7 @@ $resFÖLJARE = $stmt->fetchAll();//Id och username på alla konton man följer
 
 for ($i=0; $i < count($resFÖLJARE); $i++) {//loopar igenom alla quiz alla konton har genomfört och hämtar detaljer
 
-   $sql = "SELECT * FROM quizhistorik WHERE userid = " . $resFÖLJARE[$i]['följd_user_id'] . " ORDER BY date ASC";
+   $sql = "SELECT * FROM quizhistorik WHERE userid = " . $resFÖLJARE[$i]['följd_user_id'] . " ORDER BY date DESC";
    $stmt = $dbconn->prepare($sql);
    $data = array();  
    $stmt->execute($data);
